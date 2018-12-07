@@ -4,7 +4,9 @@ import json
 from typing import Dict, Tuple, List
 
 import numpy as np
+import pylab
 from scipy.misc import imsave
+import matplotlib.pyplot as plt
 
 
 def disparity_terms(l1,l2):
@@ -52,6 +54,46 @@ def do_greedy_outliers(results: Dict[Tuple[int, int], Tuple[List[int], List[int]
 
     for point, disparity in top_results:
         print(f'{point}: {disparity}')
+
+def do_percentage_same(results: Dict[Tuple[int, int], Tuple[List[int], List[int]]]):
+    same = 0
+    total = 0
+
+    for point, results in results.items():
+        greedy, brute = results
+        if set(greedy) == set(brute):
+            same += 1
+        total += 1
+
+    print(same/total)
+
+
+def do_percentage_same_n(results: Dict[Tuple[int, int], Tuple[List[int], List[int]]]):
+    n_max = max([t[0] for t in results.keys()])
+
+    n_values = list(range(1, n_max+1))
+
+    def percent_same(n):
+        same = 0
+        total = 0
+
+        for point, items in results.items():
+            if point[0] <= n and point[1] <= n:
+                greedy, brute = items
+                if set(greedy) == set(brute):
+                    same += 1
+                total += 1
+
+        return same / total if total != 0 else 1
+
+    percentage_values = [percent_same(n) for n in n_values]
+    plt.rc('font', family='serif', size=13)
+    plt.plot(np.array(n_values), np.array(percentage_values))
+    plt.xlabel('$n$')
+    plt.title('Greedy/optimal equivalent expansions for $x,y \leq n$')
+    plt.ylabel('Percentage Same')
+    plt.ylim(0.7, 1.0)
+    pylab.savefig('n_percent_graph.png')
 
 def do_constant_disp(results: Dict[Tuple[int, int], Tuple[List[int], List[int]]]):
     sums = {}

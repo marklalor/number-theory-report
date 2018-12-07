@@ -2,34 +2,31 @@ import argparse
 import csv
 import json
 import sys
-from typing import Set, Dict, Tuple
+from typing import Set, Dict, Tuple, List
 
 
-class Result:
-    def __init__(self, x: int, y: int, fib: Set[int], brute: Set[int]):
-        self.x = x
-        self.y = y
-        self.fib = fib
-        self.brute = brute
-        self.disparity = len(fib) - len(brute)
+def disparity_terms(l1,l2):
+    return abs(len(l1) - len(l2))
 
+def disparity_denominator(l1,l2):
+    return max(l1) - max(l2)
 
-def do_pixel_terms(results: Dict[Tuple[int, int], Result]):
+def do_pixel_terms(results: Dict[Tuple[int, int], Tuple[List[int], List[int]]]):
     pass
 
-def do_contanst_disp(results: Dict[Tuple[int, int], Result]):
+def do_constant_disp(results: Dict[Tuple[int, int], Tuple[List[int], List[int]]]):
     sums = {}
     for y in range(2, 501):
         for x in range(1, y):
             result = results[(x, y)]
             if x not in sums:
                 sums[x] = 0
-            sums[x] += result.disparity
+            sums[x] += disparity_terms(result[0], result[1])
 
     for key in sums:
         sums[key] /= 499
 
-    print sums
+    print(sums)
     exit()
 
 
@@ -44,7 +41,7 @@ if __name__ == '__main__':
 
     parser = argparse.ArgumentParser(description='Make some graphs')
     parser.add_argument('result_file')
-    parser.add_argument('actions', nargs='+', choices={'pixel_terms', 'pixel_denominators'}, help='actions to perform')
+    parser.add_argument('actions', nargs='+', choices={'pixel_terms', 'pixel_denominators', 'constant_disp'}, help='actions to perform')
     args = parser.parse_args()
 
     mapping = dict()

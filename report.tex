@@ -75,7 +75,7 @@ Egyptian fractions can be used to solve questions concerning division of a quant
 \section{Algorithms}
 \subsection{Fibonacci's Greedy Algorithm}
 \begin{algorithm}[H]
-\KwIn{A fraction with numerator $x$ and denominator $y$}
+\KwIn{A fraction with numerator $x$ and denominator $y$ in lowest terms.}
 \KwOut{A set $S$ of fractions with unit numerators such that $\sum\limits_{t \in S} t=\frac{x}{y}$}
 \eIf{$x=1$}{
 	\KwRet $\bigg\{\frac{1}{y}\bigg\}$
@@ -133,7 +133,7 @@ From equation \ref{greedy2}, we can see that the numerator of the original term,
 In the odd greedy algorithm, the only difference is that it picks the largest unitary fraction but with the restriction that the denominator is odd.
 
 \begin{algorithm}[H]
-\KwIn{A fraction with numerator $x$ and denominator $y$, }
+\KwIn{A fraction with numerator $x$ and denominator $y$ in lowest terms.}
 \KwOut{A set $S$ of fractions with unit numerators and odd denominators such that $\sum\limits_{t \in S} t=\frac{x}{y}$}
 \eIf{$x=1$}{
 	\KwRet $\bigg\{\frac{1}{y}\bigg\}$

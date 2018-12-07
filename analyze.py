@@ -11,10 +11,27 @@ class Result:
         self.y = y
         self.fib = fib
         self.brute = brute
+        self.disparity = len(fib) - len(brute)
 
 
 def do_pixel_terms(results: Dict[Tuple[int, int], Result]):
     pass
+
+def do_contanst_disp(results: Dict[Tuple[int, int], Result]):
+    sums = {}
+    for y in range(2, 501):
+        for x in range(1, y):
+            result = results[(x, y)]
+            if x not in sums:
+                sums[x] = 0
+            sums[x] += result.disparity
+
+    for key in sums:
+        sums[key] /= 499
+
+    print sums
+    exit()
+
 
 
 if __name__ == '__main__':

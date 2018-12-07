@@ -22,9 +22,9 @@
 \usepackage{fancyhdr}
 \pagestyle{fancyplain}
 \fancyhead{}											% No page header
-\fancyfoot[L]{\thesection}
-\fancyfoot[C]{}
-\fancyfoot[R]{Page \thepage}
+\fancyfoot[L]{}
+\fancyfoot[C]{\thepage}
+\fancyfoot[R]{}
 \renewcommand{\headrulewidth}{0pt}
 \renewcommand{\footrulewidth}{0pt}
 \setlength{\headheight}{13.6pt}
@@ -44,7 +44,7 @@
 		\usefont{OT1}{bch}{b}{n}
 		\normalfont \normalsize \textsc{Case Western Reserve University} \\ [25pt]
 		\horrule{0.5pt} \\[0.4cm]
-		\huge Egyptian Fractions: The Fractions of Egypt \\
+		\huge Egyptian Fractions: Algorithms and Problems \\
 		\horrule{2pt} \\[0.5cm]
 }
 \author{
@@ -60,8 +60,6 @@
 %%% Begin document
 \begin{document}
 \maketitle
-\section{Abstract}
-Abstract
 \section{Introduction}
 An Egyptian fraction is an expansion of a positive rational number as a sum of (usually distinct) unit fractions. Unit fractions are fractions with $1$ in the numerator and a positive integer in the denominator. That is, the representation of a rational number $p/q$ as:
 \begin{equation}
@@ -70,11 +68,13 @@ An Egyptian fraction is an expansion of a positive rational number as a sum of (
 \subsection{History}
 Usage of Egyptian fractions by Egyptians is evidenced by the Rhind Papyrus which is a document that dates back to 1550 BCE \cite{imhausen}. The Rhind Papyrus gets its name from Henry Rhind who purchased the document in 1858 \cite{imhausen}. In the Rhind Papyrus, there is a table of Egyptian Fraction representations for fractions of the form $\frac{2}{n}$ (where n is odd) and Egyptian fraction practice problems with corresponding solutions \cite{imhausen}. With the advent of computational theory, new problems involving Egyptian fractions have appeared such as the computation complexity of computing Egyptian Fraction of a fraction in the fewest terms possible and the Erd\H{o}s-Straus Conjecture [6].
 \subsection{Properties}
-Egyptian fractions can be used to solve questions concerning division of a quantity among multiple parties where the division may not be even. For example, consider the problem of dividing 5 loaves of bread among 7 people: $5/7 = 1/2 + 1/7 + 1/14$. Without the expansion, all 5 loaves would need to be divided into sevenths, then 5 of each seventh would go to each person. With the expansion, 4 loaves can be cut into halves, each person receiving a half piece. The remaining half loaf can be cut into sevenths (these would be fourteenths), and each person would receive a fourteenth. There remains one loaf of bread which we can cut into sevenths and evenly distribute among all 7 people. In total, we performed $4 + 6 + 6 = 16$ cuts. Without the expansion, we would need to perform $5 \times 6 = 30$ cuts. Beyond the application of dividing quantities, several mathematicians found interesting properties associated with Egyptian fractions. For instance, Fibonacci was able to prove that any fraction could be represented as a finite sum of distinct unit fractions \cite{dunton}. 
+Egyptian fractions can be used to solve questions concerning division of a quantity among multiple parties where the division may not be even. For example, consider the problem of dividing 5 loaves of bread among 7 people: $5/7 = 1/2 + 1/7 + 1/14$. Without the expansion, all 5 loaves would need to be divided into sevenths, then 5 of each seventh would go to each person. With the expansion, 4 loaves can be cut into halves, each person receiving a half piece. The remaining half loaf can be cut into sevenths (these would be fourteenths), and each person would receive a fourteenth. There remains one loaf of bread which we can cut into sevenths and evenly distribute among all 7 people. In total, we performed $4 + 6 + 6 = 16$ cuts. Without the expansion, we would need to perform $5 \times 6 = 30$ cuts.
+
+Beyond the application of dividing quantities, several mathematicians found interesting properties associated with Egyptian fractions. For instance, Fibonacci was able to prove that any fraction could be represented as a finite sum of distinct unit fractions \cite{dunton}.
 
 \section{Algorithms}
 \subsection{Fibonacci's Greedy Algorithm}
-\begin{algorithm}[H]
+\begin{algorithm}[t]
 \KwIn{A fraction with numerator $x$ and denominator $y$ in lowest terms.}
 \KwOut{A set $S$ of fractions with unit numerators such that $\sum\limits_{t \in S} t=\frac{x}{y}$}
 \eIf{$x=1$}{
@@ -82,9 +82,7 @@ Egyptian fractions can be used to solve questions concerning division of a quant
 }{
 	 $k \longleftarrow \bigg\lceil\frac{y}{x}\bigg\rceil$
 	 
-	 $x' \longleftarrow -y \mod x$
-	 
-	 $y' \longleftarrow yk$
+	 $\frac{x'}{y'} \longleftarrow \frac{x}{y} - \frac{1}{k}$ such that $\frac{x'}{y'}$ is in lowest terms.
 	 
 	 \KwRet $\bigg\{\frac{1}{k}\bigg\}\:\bigcup\:\textsc{fib-greedy}\left(\frac{x'}{y'}\right)$
 	 
@@ -93,7 +91,9 @@ Egyptian fractions can be used to solve questions concerning division of a quant
 \caption{\textsc{fib-greedy}: Fibonacci's Greedy Algorithm}
 \label{alg:one}
 \end{algorithm}
-Proof of Fibonacci’s Greedy Algorithm:
+Fibbonaci's greedy algorithm can be stated as follows: subtract out the largest possible unit fraction from the original fraction (that is, the largest fraction that does not result in a negative number after subtraction), then recurse on the result. The motivation of this algorithm is to decrease the remaining fractional value as fast as possible. The algorithm's implementation is demonstrated in more detail in Algorithm \ref{alg:one}. We explore some of the observed consequences of this greedy approach in Section \ref{sec:optimality}.
+
+It simple to show by induction that the algorithm returns a valid expansion, however it is less clear whether the algorithm will always terminate. We present a proof that Fibonacci’s greedy algorithm always terminates:
 
 Let us start with a rational number, $\frac{p}{q}$. In our greedy expansion, we have:
 \begin{equation}\label{greedy1}
@@ -130,9 +130,9 @@ This inequality comes from the fact that a1 is the smallest denominator such tha
 From equation \ref{greedy2}, we can see that the numerator of the original term, $p$, is strictly larger than the numerator of the remainder term, $pa_1 - q$. Thus, we have shown that Fibonacci’s greedy algorithm terminates.
 
 \subsection{Odd Greedy Algorithm}
-In the odd greedy algorithm, the only difference is that it picks the largest unitary fraction but with the restriction that the denominator is odd.
+In the odd greedy algorithm, the only difference is that it picks the largest unitary fraction but with the restriction that the denominator is odd. Unlike Fibonacci's greedy algorithm, it has remained unproven whether or not the greedy algorithm always terminates, no examples have shown that it does not. We discuss this open problem in more detail in Section \ref{sec:oddgreedy}. We demonstrate more precisely the implementation of this algorithm in Algorithm \ref{alg:two}.
 
-\begin{algorithm}[H]
+\begin{algorithm}[t]
 \KwIn{A fraction with numerator $x$ and denominator $y$ in lowest terms.}
 \KwOut{A set $S$ of fractions with unit numerators and odd denominators such that $\sum\limits_{t \in S} t=\frac{x}{y}$}
 \eIf{$x=1$}{
@@ -140,7 +140,7 @@ In the odd greedy algorithm, the only difference is that it picks the largest un
 }{
 	 $n \longleftarrow$ the smallest integer such that $n \geq \frac{y}{x}$ and $n \equiv 1 \pmod{2}$.
 	 
-	 $\frac{x'}{y'} \longleftarrow \frac{x}{y} - \frac{1}{n}$
+	 $\frac{x'}{y'} \longleftarrow \frac{x}{y} - \frac{1}{n}$ such that $\frac{x'}{y'}$ is in lowest terms.
 	 
 	 \KwRet $\bigg\{\frac{1}{n}\bigg\}\:\bigcup\:\textsc{odd-greedy}\left(\frac{x'}{y'}\right)$
 	 
@@ -178,6 +178,54 @@ Equipped with the ability to use brute force for finding all solutions for equat
 
 The solution returned by this algorithm will be the shortest Egyptian Fraction for the rational number p. We can prove this by assuming that there exists an "optimal" Egyptian Fraction, $O$, shorter than the expansion we returned from the algorithm, $E$. Since the generalization of Mustapha’s brute force approach would have enumerated and checked all expansions $< \|E\|$, our algorithm must have found $O$ and not returned it because it was not a valid Egyptian Fraction for $p$. Thus, we arrive at a contradiction that $O$ is not a valid Egyptian Fraction. 
 
+\subsection{Optimality of the Greedy Algorithm}\label{sec:optimality}
+It is interesting to see how the Egyptian fractions derived from Fibonacci’s greedy algorithm diverge from the "optimal" solutions generated by the brute-force approach. We evaluated the brute-force and greedy algorithms for fractions $\frac{x}{y}$ where $x,y \leq n$ for $n=500$ to investigate these differences (materials available at \href{https://github.com/marklalor/number-theory-report}{github.com/marklalor/number-theory-report}). Unsurprisingly, the frequency of matching results decreases as the fractions' components grow larger. However, for small $n$, it is notable that the greedy algorithm finds the optimal solution quite frequently as can be seen in Figure \ref{fig:n_freq}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.60\textwidth]{n_percent_graph}
+\caption{Frequency of optimal Egyptian fractions found by the greedy algorithm for all fractions of the form $\frac{x}{y}$ such that $x,y \leq n$.}
+\label{fig:n_freq}
+\end{figure}
+
+In order to analyze some other patterns or interesting results of the solutions, we quantify the \textbf{disparity} between algorithm solutions in two ways:
+\begin{enumerate}
+	\item \textbf{term disparity}: the difference in number of terms between the greedy and optimal expansions.
+	\item \textbf{denominator disparity}: the difference in the magnitudes of the largest denominators between the greedy and optimal expansions.
+\end{enumerate}
+
+We plot the term disparity between the greedy and optimal expansions with darker pixels for higher term disparity at point $(x,y)$ for fraction $\frac{x}{y}$ in Figure \ref{fig:term_disp}.
+
+\begin{figure}[t]
+\centering
+\fbox{\includegraphics[width=0.75\textwidth]{pixel_terms}}
+\caption{Term disparity between Fibonacci and optimal expansions for $\frac{x}{y}$. Higher term disparity is represented by darker pixels, while white represents zero term disparity.}
+\label{fig:term_disp}
+\end{figure}
+
+An interesting feature of the term disparities in this sample is that the maximum disparity is much smaller in magnitude compared to the magnitudes of $x$ and $y$. While $x$ and $y$ can be up to $500$, the maximum term disparity is $8$. We find several fractions with term disparities of $8$, noted in Figure \ref{fig:disparity}.
+
+There are clear patterns in the distribution of the optimal and unoptimal greedy expansions. We notice immediately in the middle of the image we have a line that lie near multiples of $1/2$. Lines that appear above this center one are near a multiple of $1/n$. Lines below the center are near multiples of $(n-1)/n$
+
+We also take a look at some of expansions with worst denominator disparity in the sample set. We find that that expansions with the highest denominator disparities are also often the same as those with the highest term disparities, the largest being $\frac{36}{457}$ with denominator disparity of $2837$! These can also be seen in Figure \ref{fig:disparity} alongside term disparity.
+
+\begin{figure}[t]
+\centering
+\begin{tabular}{|c|c|c|c|}
+    \hline
+    \multicolumn{2}{|c|}{\textbf{fraction}} & \multicolumn{2}{|c|}{\textbf{disparity}} \\ \hline
+	\textbf{x} & \textbf{y} & \textbf{term} & \textbf{denominator} \\ \hline\hline
+	36 & 457 & 8 & 2837 \\ \hline
+	11 & 199 & 8 & 1343 \\ \hline
+    22 & 398 & 8 & 1343 \\ \hline
+    221 & 398 & 8 & 1343 \\ \hline
+    9 & 271 & 6 & 390 \\ \hline
+    31 & 311 & 6 & 529 \\ \hline
+\end{tabular}
+\caption{High term and denominator disparities (base 10) for exemplary fractions.}
+\label{fig:disparity}
+\end{figure}
+ 
 \section{Open Problems}
 \subsection{Efficient Shortest Egyptian Fraction}
 
@@ -200,7 +248,7 @@ With brute-force computer aid, the conjecture has been proved for $n \leq 1017$.
 Work has been done to show the form that counterexamples would take on. Of particular interest is the form of the smallest $n$ that is a counterexample. If the smallest counterexample was a composite number, then the solution for the composing primes could be found first, therefore it is a contradiction that the smallest $n$ is composite and therefore it is prime.
 
 Additionally, Mordell proved that if a solution is prime, it is congruent to one of $12$, $112$, $132$, $172$, $192$, or $232 \pmod{840}$\:\cite{mordell}, therefore the smallest counterexample $n$ would also be a member of one of these sequences.
-\subsection{Correctness of the Odd Greedy Algorithm}
+\subsection{Correctness of the Odd Greedy Algorithm}\label{sec:oddgreedy}
 In \cite{starke}, Starke et. al show that a finite odd Egyptian fraction exists for all positive rational numbers with odd denominators. However, they do not show whether an \textit{odd greedy expansion} exists for all positive rational numbers with odd denominators. An odd greedy expansion is a special case of the Egyptian fraction which is generated by the odd greedy algorithm. In \cite{guy}, Stein, Selfridge, Graham are given credit for posing the question: “If $m/n$, a rational number ($n$ odd), is expressed as $\sum \frac{1}{x_i}$, where the $x_i$ are successively chosen to be the least possible odd integers which leave a nonnegative remainder, is the sum always finite?” So far, Kertesz has checked this conjecture for $2 < m < n < 120$ \cite{guy}. However, for some rational numbers, the odd greedy expansion can yield unitary fractions with pathologically large denominators. For example, David Bailey found that $5/5809$ yielded a unitary fraction with over $60,000,000$ decimal digits \cite{guy}. Currently, it is unknown whether all rational numbers with odd denominators have an odd greedy expansion, since it has not yet been proven that the odd greedy algorithm always terminates or that a counterexample for the conjecture exists.
 
 

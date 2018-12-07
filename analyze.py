@@ -45,10 +45,17 @@ def do_pixel_graph(results: Dict[Tuple[int, int], Tuple[List[int], List[int]]], 
 
     imsave(f'pixel_{disparity_function.__name__}.png', data)
 
-def do_greedy_outliers(results: Dict[Tuple[int, int], Tuple[List[int], List[int]]]):
+
+def do_greedy_outliers_denominators(results: Dict[Tuple[int, int], Tuple[List[int], List[int]]]):
     term_disparities = {key: disparity_denominator(*value) for key, value in results.items()}
 
-    max_disparity = max(term_disparities.values())
+    top_results = sorted(term_disparities.items(), key=lambda x: -x[1])[:10]
+
+    for point, disparity in top_results:
+        print(f'{point}: {disparity}')
+
+def do_greedy_outliers_terms(results: Dict[Tuple[int, int], Tuple[List[int], List[int]]]):
+    term_disparities = {key: disparity_terms(*value) for key, value in results.items()}
 
     top_results = sorted(term_disparities.items(), key=lambda x: -x[1])[:10]
 
@@ -90,7 +97,7 @@ def do_percentage_same_n(results: Dict[Tuple[int, int], Tuple[List[int], List[in
     plt.rc('font', family='serif', size=13)
     plt.plot(np.array(n_values), np.array(percentage_values))
     plt.xlabel('$n$')
-    plt.title('Greedy/optimal equivalent expansions for $x,y \leq n$')
+    # plt.title('Greedy/optimal equivalent expansions for $x,y \leq n$')
     plt.ylabel('Percentage Same')
     plt.ylim(0.7, 1.0)
     pylab.savefig('n_percent_graph.png')

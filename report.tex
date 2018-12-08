@@ -68,7 +68,7 @@ An Egyptian fraction is an expansion of a positive rational number as a sum of (
 \subsection{History}
 Usage of Egyptian fractions by Egyptians is evidenced by the Rhind Papyrus which is a document that dates back to 1550 BCE \cite{imhausen}. The Rhind Papyrus gets its name from Henry Rhind who purchased the document in 1858 \cite{imhausen}. In the Rhind Papyrus, there is a table of Egyptian Fraction representations for fractions of the form $\frac{2}{n}$ (where n is odd) and Egyptian fraction practice problems with corresponding solutions \cite{imhausen}. With the advent of computational theory, new problems involving Egyptian fractions have appeared such as the computation complexity of computing Egyptian Fraction of a fraction in the fewest terms possible and the Erd\H{o}s-Straus Conjecture [6].
 \subsection{Properties}
-Egyptian fractions can be used to solve questions concerning division of a quantity among multiple parties where the division may not be even. For example, consider the problem of dividing 5 loaves of bread among 7 people: $5/7 = 1/2 + 1/7 + 1/14$. Without the expansion, all 5 loaves would need to be divided into sevenths, then 5 of each seventh would go to each person. With the expansion, 4 loaves can be cut into halves, each person receiving a half piece. The remaining half loaf can be cut into sevenths (these would be fourteenths), and each person would receive a fourteenth. There remains one loaf of bread which we can cut into sevenths and evenly distribute among all 7 people. In total, we performed $4 + 6 + 6 = 16$ cuts. Without the expansion, we would need to perform $5 \times 6 = 30$ cuts.
+Egyptian fractions can be used to solve questions concerning division of a quantity among multiple parties where the division may not be even. For example, consider the problem of dividing 5 loaves of bread among 7 people: $\frac{5}{7} = \frac{1}{2} + \frac{1}{7} + \frac{1}{7}$. Without the expansion, all 5 loaves would need to be divided into sevenths, then 5 of each seventh would go to each person. With the expansion, 4 loaves can be cut into halves, each person receiving a half piece. The remaining half loaf can be cut into sevenths (these would be fourteenths), and each person would receive a fourteenth. There remains one loaf of bread which we can cut into sevenths and evenly distribute among all 7 people. In total, we performed $4 + 6 + 6 = 16$ cuts. Without the expansion, we would need to perform $5 \times 6 = 30$ cuts.
 
 Beyond the application of dividing quantities, several mathematicians found interesting properties associated with Egyptian fractions. For instance, Fibonacci was able to prove that any fraction could be represented as a finite sum of distinct unit fractions \cite{dunton}.
 
@@ -116,7 +116,7 @@ Next we will make use of the inequality:
 	\frac{1}{a_1 - 1} > \frac{p}{q}
 \end{equation}
 
-This inequality comes from the fact that a1 is the smallest denominator such that $1/a_1 < p/q$ which means a unitary fraction with a smaller denominator than $a_1$ would be greater than $p/q$. With some algebraic manipulation, we find:
+This inequality comes from the fact that $a_1$ is the smallest denominator such that $\frac{1}{a_1} < \frac{p}{q}$ which means a unitary fraction with a smaller denominator than $a_1$ would be greater than $frac{p}{q}$. With some algebraic manipulation, we find:
 
 \begin{equation}\label{greedy2}
 \begin{split}
@@ -127,10 +127,10 @@ This inequality comes from the fact that a1 is the smallest denominator such tha
 \end{split}
 \end{equation}
 
-From equation \ref{greedy2}, we can see that the numerator of the original term, $p$, is strictly larger than the numerator of the remainder term, $pa_1 - q$. Thus, we have shown that Fibonacci’s greedy algorithm terminates.
+From equation \ref{greedy2}, we can see that the numerator of the original term, $p$, is strictly larger than the numerator of the remainder term, $pa_1 - q$. Thus, we have shown that Fibonacci’s greedy algorithm always terminates.
 
 \subsection{Odd Greedy Algorithm}
-In the odd greedy algorithm, the only difference is that it picks the largest unitary fraction but with the restriction that the denominator is odd. Unlike Fibonacci's greedy algorithm, it has remained unproven whether or not the greedy algorithm always terminates, no examples have shown that it does not. We discuss this open problem in more detail in Section \ref{sec:oddgreedy}. We demonstrate more precisely the implementation of this algorithm in Algorithm \ref{alg:two}.
+In the odd greedy algorithm, the only difference is that it picks the largest unitary fraction but with the restriction that the denominator is odd. Unlike Fibonacci's greedy algorithm, it has remained unproven whether or not the odd greedy algorithm always terminates. Currently, no examples have shown that it does not terminate. We discuss this open problem in more detail in Section \ref{sec:oddgreedy}. We demonstrate more precisely the implementation of this algorithm in Algorithm \ref{alg:two}.
 
 \begin{algorithm}[t]
 \KwIn{A fraction with numerator $x$ and denominator $y$ in lowest terms.}
@@ -151,7 +151,7 @@ In the odd greedy algorithm, the only difference is that it picks the largest un
 
 \subsection{Brute Force Shortest Algorithm}
 In \cite{stewart}, Stewart tells a story about two men who come across the Diophantine equation:
-\begin{equation}
+\begin{equation}\label{brute_dio}
 	\frac{1}{a} + \frac{1}{b} + \frac{1}{c} + \frac{1}{d} = 1
 \end{equation}
 One of the men in the story, Mustapha, enumerated all the solutions to this Diophantine equation. To do so, Mustapha introduced the constraint:
@@ -159,7 +159,7 @@ One of the men in the story, Mustapha, enumerated all the solutions to this Diop
 	a < b < c < d
 \end{equation}
 
-With this constraint, Mustapha could systematically try all potentially valid values for $a$,$b$,$c$, and $d$. For instance, to solve the above Diophantine equation, $a$ cannot be smaller than 4 because if $a=5$, any assignment of $b$,$c$, and $d$ with constraint \ref{brute1} will be less than 1. Though Mustapha used his brute force for four unit fractions, his approach can also be generalized to $n$ unit fractions:
+With this constraint, Mustapha could systematically try all potentially valid values for $a$,$b$,$c$, and $d$. For instance, to solve the above Diophantine equation, $a$ cannot be smaller than 4 because if $a=5$, any assignment of $b$,$c$, and $d$ with constraint \ref{brute1} will be less than 1 in equation \ref{brute_dio}. Though Mustapha used his brute force for four unit fractions, his approach can also be generalized to $n$ unit fractions:
 
 \begin{equation}
 	\frac{1}{a_1} + \frac{1}{a_2} + \ldots + \frac{1}{a_n} = 1
@@ -174,12 +174,12 @@ In addition to generalizing Mustapha’s brute approach to a variable number of 
 	\frac{1}{a_1} + \frac{1}{a_2} + \ldots + \frac{1}{a_n} = p
 \end{equation}
 
-Equipped with the ability to use brute force for finding all solutions for equation \ref{brute_p}, we can find the shortest Egyptian Fraction for any positive rational number, $p$, by trying Mustapha’s brute force approach for 1, 2, … until we find a solution.
+Equipped with the ability to use brute force for finding all solutions for equation \ref{brute_p}, we can find the shortest Egyptian Fraction for any positive rational number, $p$, by trying Mustapha’s brute force approach for 1, 2, … unit fractions until we find a solution.
 
 The solution returned by this algorithm will be the shortest Egyptian Fraction for the rational number p. We can prove this by assuming that there exists an "optimal" Egyptian Fraction, $O$, shorter than the expansion we returned from the algorithm, $E$. Since the generalization of Mustapha’s brute force approach would have enumerated and checked all expansions $< \|E\|$, our algorithm must have found $O$ and not returned it because it was not a valid Egyptian Fraction for $p$. Thus, we arrive at a contradiction that $O$ is not a valid Egyptian Fraction. 
 
 \subsection{Optimality of the Greedy Algorithm}\label{sec:optimality}
-It is interesting to see how the Egyptian fractions derived from Fibonacci’s greedy algorithm diverge from the "optimal" solutions generated by the brute-force approach. We evaluated the brute-force and greedy algorithms for fractions $\frac{x}{y}$ where $x,y \leq n$ for $n=500$ to investigate these differences (materials available at \href{https://github.com/marklalor/number-theory-report}{github.com/marklalor/number-theory-report}). Unsurprisingly, the frequency of matching results decreases as the fractions' components grow larger. However, for small $n$, it is notable that the greedy algorithm finds the optimal solution quite frequently as can be seen in Figure \ref{fig:n_freq}
+After doing some research, we were interested in seeing how the Egyptian fractions derived from Fibonacci’s greedy algorithm diverge from the "optimal" solutions generated by the brute-force approach. We evaluated the brute-force and greedy algorithms for fractions $\frac{x}{y}$ where $x,y \leq n$ for $n=500$ to investigate these differences (materials available at \href{https://github.com/marklalor/number-theory-report}{github.com/marklalor/number-theory-report}). Unsurprisingly, the frequency of matching results decreases as the fractions' components grow larger. However, for small $n$, it is notable that the greedy algorithm finds the optimal solution quite frequently as can be seen in Figure \ref{fig:n_freq}
 
 \begin{figure}[t]
 \centering
@@ -205,9 +205,9 @@ We plot the term disparity between the greedy and optimal expansions with darker
 
 An interesting feature of the term disparities in this sample is that the maximum disparity is much smaller in magnitude compared to the magnitudes of $x$ and $y$. While $x$ and $y$ can be up to $500$, the maximum term disparity is $8$. We find several fractions with term disparities of $8$, noted in Figure \ref{fig:disparity}.
 
-There are clear patterns in the distribution of the optimal and unoptimal greedy expansions. We notice immediately in the middle of the image we have a line that lie near multiples of $1/2$. Lines that appear above this center one are near a multiple of $1/n$. Lines below the center are near multiples of $(n-1)/n$
+There are clear patterns in the distribution of the optimal and unoptimal greedy expansions. We notice immediately in the middle of the image we have a line that lie near multiples of $\frac{1}{2}$. Lines that appear above this center one are near a multiple of $\frac{1}{n}$. Lines below the center are near multiples of $\frac{n-1}{n}$
 
-We also take a look at some of expansions with worst denominator disparity in the sample set. We find that that expansions with the highest denominator disparities are also often the same as those with the highest term disparities, the largest being $\frac{36}{457}$ with denominator disparity of $2837$! These can also be seen in Figure \ref{fig:disparity} alongside term disparity.
+We also take a look at some of expansions with worst denominator disparity in the sample set. We find that that expansions with the highest denominator disparities are also often the same as those with the highest term disparities, the largest being $\frac{36}{457}$ with denominator disparity of $2837$. These can also be seen in Figure \ref{fig:disparity} alongside term disparity.
 
 \begin{figure}[t]
 \centering
